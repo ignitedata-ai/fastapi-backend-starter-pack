@@ -1,4 +1,4 @@
-# AIPAL Backend Services
+# FastAPI Backend Starter Pack
 
 AI-powered platform for data insights and analytics - Backend API Services
 
