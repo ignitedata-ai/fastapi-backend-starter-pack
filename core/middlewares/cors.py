@@ -98,15 +98,15 @@ def _is_valid_origin(origin: str) -> bool:
     # Split origin into components
     try:
         # Basic pattern check first
-        if not re.match(r'^https?://.+', origin):
+        if not re.match(r"^https?://.+", origin):
             return False
-        
+
         # Remove protocol
-        without_protocol = origin.split('://', 1)[1]
-        
+        without_protocol = origin.split("://", 1)[1]
+
         # Split host and port
-        if ':' in without_protocol:
-            host, port_str = without_protocol.rsplit(':', 1)
+        if ":" in without_protocol:
+            host, port_str = without_protocol.rsplit(":", 1)
             try:
                 port = int(port_str)
                 if port < 1 or port > 65535:
@@ -115,35 +115,35 @@ def _is_valid_origin(origin: str) -> bool:
                 return False
         else:
             host = without_protocol
-        
+
         # Validate host
         if not host:
             return False
-            
+
         # Allow localhost
-        if host in ['localhost', '127.0.0.1', '0.0.0.0']:
+        if host in ["localhost", "127.0.0.1", "0.0.0.0"]:
             return True
-            
+
         # Validate IP address
-        if re.match(r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$', host):
+        if re.match(r"^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", host):
             return True
-            
+
         # Validate domain name
         # Domain must have at least one dot for TLD
-        if '.' not in host:
+        if "." not in host:
             return False
-            
+
         # Check each part of the domain
-        parts = host.split('.')
+        parts = host.split(".")
         for part in parts:
             if not part:  # Empty part (double dot)
                 return False
             if len(part) > 63:  # Domain part too long
                 return False
-            if not re.match(r'^[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?$', part):
+            if not re.match(r"^[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?$", part):
                 return False
-                
+
         return True
-        
+
     except Exception:
         return False

@@ -22,7 +22,7 @@ help:
 	@echo "  check       - Run all quality checks"
 
 install:
-	uv pip install -e .
+	uv sync --frozen --no-cache
 
 dev:
 	python main.py
@@ -75,9 +75,6 @@ init-db:
 check: lint test
 	@echo "All quality checks passed!"
 
-# Development with live reload
-dev-docker:
-	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 # Database operations
 db-up:
