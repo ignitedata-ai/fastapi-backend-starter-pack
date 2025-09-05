@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.sql.elements import BinaryExpression
 
-from core.repository.base import BaseRepository
+from core.repositories.base import BaseRepository
 
 
 # Test Models and Schemas
@@ -110,7 +110,7 @@ class TestBaseRepositoryCreate:
     @pytest.mark.asyncio
     async def test_create_with_dict(self, test_repository, sample_user_data, mock_user):
         """Test creating record with dictionary data."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -135,7 +135,7 @@ class TestBaseRepositoryCreate:
     @pytest.mark.asyncio
     async def test_create_with_pydantic_schema(self, test_repository, sample_user_schema, mock_user):
         """Test creating record with Pydantic schema."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -152,7 +152,7 @@ class TestBaseRepositoryCreate:
     @pytest.mark.asyncio
     async def test_create_with_invalid_input_type(self, test_repository):
         """Test creating record with invalid input type."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -162,7 +162,7 @@ class TestBaseRepositoryCreate:
     @pytest.mark.asyncio
     async def test_create_sets_tracing_attributes(self, test_repository, sample_user_data, mock_user):
         """Test that create operation sets proper tracing attributes."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -180,7 +180,7 @@ class TestBaseRepositoryCreate:
     @pytest.mark.asyncio
     async def test_create_handles_database_error(self, test_repository):
         """Test error handling during create operation."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -200,7 +200,7 @@ class TestBaseRepositoryGet:
     @pytest.mark.asyncio
     async def test_get_existing_record(self, test_repository, mock_user):
         """Test getting an existing record."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -217,7 +217,7 @@ class TestBaseRepositoryGet:
     @pytest.mark.asyncio
     async def test_get_non_existing_record(self, test_repository):
         """Test getting a non-existing record."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -233,7 +233,7 @@ class TestBaseRepositoryGet:
     @pytest.mark.asyncio
     async def test_get_sets_tracing_attributes(self, test_repository):
         """Test that get operation sets proper tracing attributes."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -256,7 +256,7 @@ class TestBaseRepositoryGetMulti:
     @pytest.mark.asyncio
     async def test_get_multi_without_filters(self, test_repository):
         """Test getting multiple records without filters."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -274,7 +274,7 @@ class TestBaseRepositoryGetMulti:
     @pytest.mark.asyncio
     async def test_get_multi_with_pagination(self, test_repository):
         """Test getting multiple records with pagination."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -293,7 +293,7 @@ class TestBaseRepositoryGetMulti:
     @pytest.mark.asyncio
     async def test_get_multi_with_filters(self, test_repository):
         """Test getting multiple records with filters."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -313,7 +313,7 @@ class TestBaseRepositoryGetMulti:
     @pytest.mark.asyncio
     async def test_get_multi_with_order_by(self, test_repository):
         """Test getting multiple records with ordering."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -334,7 +334,7 @@ class TestBaseRepositoryUpdate:
     @pytest.mark.asyncio
     async def test_update_existing_record_with_dict(self, test_repository, mock_user):
         """Test updating existing record with dictionary."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -353,7 +353,7 @@ class TestBaseRepositoryUpdate:
     @pytest.mark.asyncio
     async def test_update_existing_record_with_schema(self, test_repository, mock_user):
         """Test updating existing record with Pydantic schema."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -370,7 +370,7 @@ class TestBaseRepositoryUpdate:
     @pytest.mark.asyncio
     async def test_update_non_existing_record(self, test_repository):
         """Test updating non-existing record."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -384,7 +384,7 @@ class TestBaseRepositoryUpdate:
     @pytest.mark.asyncio
     async def test_update_with_invalid_input_type(self, test_repository, mock_user):
         """Test updating with invalid input type."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -399,7 +399,7 @@ class TestBaseRepositoryDelete:
     @pytest.mark.asyncio
     async def test_delete_existing_record(self, test_repository):
         """Test deleting existing record."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -416,7 +416,7 @@ class TestBaseRepositoryDelete:
     @pytest.mark.asyncio
     async def test_delete_non_existing_record(self, test_repository):
         """Test deleting non-existing record."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -437,7 +437,7 @@ class TestBaseRepositoryCount:
     @pytest.mark.asyncio
     async def test_count_all_records(self, test_repository):
         """Test counting all records."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -454,7 +454,7 @@ class TestBaseRepositoryCount:
     @pytest.mark.asyncio
     async def test_count_with_filters(self, test_repository):
         """Test counting records with filters."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -472,7 +472,7 @@ class TestBaseRepositoryCount:
     @pytest.mark.asyncio
     async def test_count_empty_table(self, test_repository):
         """Test counting records in empty table."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -492,7 +492,7 @@ class TestBaseRepositoryExists:
     @pytest.mark.asyncio
     async def test_exists_with_existing_record(self, test_repository):
         """Test checking existence of existing record."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -509,7 +509,7 @@ class TestBaseRepositoryExists:
     @pytest.mark.asyncio
     async def test_exists_with_non_existing_record(self, test_repository):
         """Test checking existence of non-existing record."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -530,7 +530,7 @@ class TestBaseRepositoryBulkOperations:
     @pytest.mark.asyncio
     async def test_bulk_create_with_dicts(self, test_repository):
         """Test bulk creating records with dictionaries."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -559,7 +559,7 @@ class TestBaseRepositoryBulkOperations:
     @pytest.mark.asyncio
     async def test_bulk_create_with_schemas(self, test_repository):
         """Test bulk creating records with Pydantic schemas."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -581,7 +581,7 @@ class TestBaseRepositoryBulkOperations:
     @pytest.mark.asyncio
     async def test_bulk_update(self, test_repository):
         """Test bulk updating records."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -603,7 +603,7 @@ class TestBaseRepositoryBulkOperations:
     @pytest.mark.asyncio
     async def test_bulk_delete(self, test_repository):
         """Test bulk deleting records."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -625,7 +625,7 @@ class TestBaseRepositoryErrorHandling:
     @pytest.mark.asyncio
     async def test_database_error_handling(self, test_repository):
         """Test proper error handling for database errors."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -641,7 +641,7 @@ class TestBaseRepositoryErrorHandling:
     @pytest.mark.asyncio
     async def test_bulk_create_with_invalid_input(self, test_repository):
         """Test bulk create with invalid input types."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -657,7 +657,7 @@ class TestBaseRepositoryObservability:
     @pytest.mark.asyncio
     async def test_tracing_span_creation(self, test_repository, sample_user_data, mock_user):
         """Test that tracing spans are created for operations."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -675,8 +675,8 @@ class TestBaseRepositoryObservability:
     @pytest.mark.asyncio
     async def test_logging_on_operations(self, test_repository, sample_user_data, mock_user):
         """Test that logging occurs during operations."""
-        with patch("core.repository.base.logger") as mock_logger:
-            with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.logger") as mock_logger:
+            with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
                 mock_span = MagicMock()
                 mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -696,8 +696,8 @@ class TestBaseRepositoryObservability:
     @pytest.mark.asyncio
     async def test_error_logging(self, test_repository):
         """Test that errors are properly logged."""
-        with patch("core.repository.base.logger") as mock_logger:
-            with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.logger") as mock_logger:
+            with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
                 mock_span = MagicMock()
                 mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -720,7 +720,7 @@ class TestBaseRepositoryIntegration:
     @pytest.mark.asyncio
     async def test_complete_crud_workflow(self, test_repository, mock_user):
         """Test complete CRUD workflow."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 
@@ -757,7 +757,7 @@ class TestBaseRepositoryIntegration:
     @pytest.mark.asyncio
     async def test_pagination_and_filtering_workflow(self, test_repository):
         """Test pagination and filtering workflow."""
-        with patch("core.repository.base.tracer.start_as_current_span") as mock_tracer:
+        with patch("core.repositories.base.tracer.start_as_current_span") as mock_tracer:
             mock_span = MagicMock()
             mock_tracer.return_value.__enter__.return_value = mock_span
 

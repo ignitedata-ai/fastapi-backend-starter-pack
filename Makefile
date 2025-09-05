@@ -7,6 +7,7 @@ help:
 	@echo "Available commands:"
 	@echo "  install     - Install dependencies"
 	@echo "  dev         - Run development server"
+	@echo "  dev-debug   - Run development server in debug mode"
 	@echo "  test        - Run tests"
 	@echo "  test-cov    - Run tests with coverage"
 	@echo "  lint        - Run linting"
@@ -26,6 +27,9 @@ install:
 
 dev:
 	python main.py
+
+dev-debug:
+	python -m debugpy --listen 5678 --wait-for-client main.py
 
 test:
 	pytest -v

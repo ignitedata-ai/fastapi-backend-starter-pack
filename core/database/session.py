@@ -131,64 +131,64 @@ class DatabaseSessionManager:
             raise RuntimeError("Database session manager not initialized. Call initialize() first.")
 
         session_id = id(asyncio.current_task())
-        with tracer.start_as_current_span("database_session") as span:
-            span.set_attribute("database.session_id", str(session_id))
+        # with tracer.start_as_current_span("database_session") as span:
+        # span.set_attribute("database.session_id", str(session_id))
 
-            session = None
-            try:
-                # Create new session
-                session = self._session_factory()
-                logger.debug("Database session created", session_id=session_id)
-                span.set_attribute("database.session_status", "created")
+        session = None
+        try:
+            # Create new session
+            session = self._session_factory()
+            logger.debug("Database session created", session_id=session_id)
+            # span.set_attribute("database.session_status", "created")
 
-                yield session
+            yield session
 
-                # Commit if no exceptions occurred
-                await session.commit()
-                logger.debug("Database session committed", session_id=session_id)
-                span.set_attribute("database.session_status", "committed")
+            # Commit if no exceptions occurred
+            await session.commit()
+            logger.debug("Database session committed", session_id=session_id)
+            # span.set_attribute("database.session_status", "committed")
 
-            except Exception as e:
-                logger.error(
-                    "Database session error, rolling back",
-                    session_id=session_id,
-                    error=str(e),
-                    exc_info=True,
-                )
-                span.set_attribute("database.session_status", "error")
-                span.record_exception(e)
+        except Exception as e:
+            logger.error(
+                "Database session error, rolling back",
+                session_id=session_id,
+                error=str(e),
+                exc_info=True,
+            )
+            # span.set_attribute("database.session_status", "error")
+            # span.record_exception(e)
 
-                if session:
-                    try:
-                        await session.rollback()
-                        logger.debug("Database session rolled back", session_id=session_id)
-                        span.set_attribute("database.session_rollback", "success")
-                    except Exception as rollback_error:
-                        logger.error(
-                            "Failed to rollback database session",
-                            session_id=session_id,
-                            rollback_error=str(rollback_error),
-                            exc_info=True,
-                        )
-                        span.set_attribute("database.session_rollback", "failed")
-                        span.record_exception(rollback_error)
+            if session:
+                try:
+                    await session.rollback()
+                    logger.debug("Database session rolled back", session_id=session_id)
+                    # span.set_attribute("database.session_rollback", "success")
+                except Exception as rollback_error:
+                    logger.error(
+                        "Failed to rollback database session",
+                        session_id=session_id,
+                        rollback_error=str(rollback_error),
+                        exc_info=True,
+                    )
+                    # span.set_attribute("database.session_rollback", "failed")
+                    # span.record_exception(rollback_error)
 
-                raise
-            finally:
-                if session:
-                    try:
-                        await session.close()
-                        logger.debug("Database session closed", session_id=session_id)
-                        span.set_attribute("database.session_cleanup", "success")
-                    except Exception as close_error:
-                        logger.error(
-                            "Error closing database session",
-                            session_id=session_id,
-                            close_error=str(close_error),
-                            exc_info=True,
-                        )
-                        span.set_attribute("database.session_cleanup", "failed")
-                        span.record_exception(close_error)
+            raise
+        finally:
+            if session:
+                try:
+                    await session.close()
+                    logger.debug("Database session closed", session_id=session_id)
+                    # span.set_attribute("database.session_cleanup", "success")
+                except Exception as close_error:
+                    logger.error(
+                        "Error closing database session",
+                        session_id=session_id,
+                        close_error=str(close_error),
+                        exc_info=True,
+                    )
+                    # span.set_attribute("database.session_cleanup", "failed")
+                    # span.record_exception(close_error)
 
     async def health_check(self) -> dict[str, Any]:
         """Perform a health check on the database connection.

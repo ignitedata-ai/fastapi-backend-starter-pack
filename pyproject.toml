@@ -41,6 +41,9 @@ dependencies = [
     "ujson>=5.10.0",
     "aiosqlite>=0.21.0",
     "opentelemetry-instrumentation-logging>=0.57b0",
+    "slugify>=0.0.1",
+    "aioboto3>=15.1.0",
+    "aiomysql>=0.2.0",
 ]
 
 
@@ -153,4 +156,9 @@ omit = [
     "*/tests/*",
     "*/migrations/*",
     "*/__pycache__/*"
+]
+
+[dependency-groups]
+dev = [
+    "debugpy>=1.8.16",
 ]

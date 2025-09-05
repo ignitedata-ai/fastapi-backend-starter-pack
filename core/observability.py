@@ -286,9 +286,22 @@ def setup_logging() -> None:
             )
             logger.info("OTLP gRPC log exporter configured for Jaeger", endpoint=otlp_endpoint)
         except ImportError:
-            logger.debug("OTLP gRPC log exporter not available")
+            # Try alternative import paths
+            try:
+                from opentelemetry.exporter.otlp.proto.grpc.logs_exporter import OTLPLogExporter
+                
+                otlp_endpoint = f"http://{settings.JAEGER_AGENT_HOST}:4317"
+                otlp_log_exporter = OTLPLogExporter(
+                    endpoint=otlp_endpoint,
+                    insecure=True,
+                )
+                logger.info("OTLP gRPC log exporter configured (alternative import)", endpoint=otlp_endpoint)
+            except ImportError:
+                logger.debug("OTLP gRPC log exporter not available")
+                otlp_log_exporter = None
         except Exception as e:
             logger.warning("Failed to configure OTLP gRPC log exporter", error=str(e))
+            otlp_log_exporter = None
 
         # Add OTLP log processor if exporter was created
         if otlp_log_exporter:
@@ -300,8 +313,8 @@ def setup_logging() -> None:
         else:
             logger.warning("No OTLP log exporter could be configured")
 
-    # Fallback to console exporter for development if no other exporters configured
-    if exporters_configured == 0 and settings.ENVIRONMENT == "development":
+    # Always use console exporter for development since Jaeger doesn't support OTLP logs well
+    if settings.ENVIRONMENT == "development":
         try:
             console_log_exporter = SafeConsoleLogExporter()
             # Use a shorter export timeout to prevent hanging during shutdown
@@ -313,6 +326,7 @@ def setup_logging() -> None:
             )
             provider.add_log_record_processor(console_log_processor)
             _log_processors.append(console_log_processor)
+            exporters_configured += 1
             logger.info("Safe console log exporter configured for development")
         except Exception as e:
             logger.warning("Failed to configure console log exporter", error=str(e))
@@ -330,6 +344,11 @@ def setup_logging() -> None:
 def get_logging_handler() -> Optional[LoggingHandler]:
     """Get the OpenTelemetry logging handler."""
     return _logging_handler
+
+
+def get_logger_provider():
+    """Get the OpenTelemetry logger provider."""
+    return _logger_provider
 
 
 def instrument_app(app: Any) -> None:

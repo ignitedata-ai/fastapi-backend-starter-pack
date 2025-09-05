@@ -145,3 +145,21 @@ class ConfigurationError(AIpalBaseException):
         if config_key:
             details["config_key"] = config_key
         super().__init__(message, details=details, **kwargs)
+
+
+class BadRequestException(AIpalBaseException):
+    """Raised when a request is malformed or invalid."""
+
+    def __init__(self, message: str = "Bad request", **kwargs) -> None:
+        super().__init__(message, **kwargs)
+
+
+class InternalServerException(AIpalBaseException):
+    """Raised when an internal server error occurs."""
+
+    def __init__(self, message: str = "Internal server error", **kwargs) -> None:
+        super().__init__(message, **kwargs)
+
+
+# Aliases for consistency with different naming conventions
+NotFoundException = NotFoundError

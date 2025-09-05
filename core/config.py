@@ -58,7 +58,7 @@ class Settings(BaseSettings):
 
     # Jaeger Configuration
     JAEGER_ENABLED: bool = Field(default=True)
-    JAEGER_LOGS_ENABLED: bool = Field(default=False)  # Disabled: Jaeger all-in-one doesn't support OTLP logs
+    JAEGER_LOGS_ENABLED: bool = Field(default=False)  # Disabled: Jaeger all-in-one doesn't support OTLP logs properly
     JAEGER_AGENT_HOST: str = Field(default="localhost")
     JAEGER_AGENT_PORT: int = Field(default=6831)
     JAEGER_COLLECTOR_ENDPOINT: Optional[str] = Field(default="http://localhost:14268/api/traces")
